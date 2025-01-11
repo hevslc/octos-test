@@ -13,8 +13,8 @@
 
 defmodule Seeds do
   alias Octos.Repo
-  alias Octos.Services.Cameras
-  alias Octos.User
+  alias Octos.Services.Cameras.Queries, as: Cameras
+  alias Octos.Models.User
 
   def seed_database do
     IO.puts("Populating the database...")

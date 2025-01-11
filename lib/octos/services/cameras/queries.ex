@@ -1,7 +1,8 @@
-defmodule Octos.Services.Cameras do
+defmodule Octos.Services.Cameras.Queries do
   import Ecto.Query
-  alias Octos.{Repo, Camera}
-  alias Octos.Services.Users
+  alias Octos.Models.Camera
+  alias Octos.Repo
+  alias Octos.Services.Users.Queries, as: Users
 
   @field_for_filter "name"
   @field_for_ordering "name"

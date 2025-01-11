@@ -1,6 +1,6 @@
 defmodule OctosWeb.CamerasController do
   use OctosWeb, :controller
-  alias Octos.Services.Cameras
+  alias Octos.Services.Cameras.Queries, as: Cameras
 
   def users_cameras(conn, params) do
     filter = Map.get(params, "filter")

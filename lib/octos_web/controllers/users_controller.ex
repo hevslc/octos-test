@@ -1,6 +1,6 @@
 defmodule OctosWeb.UsersController do
   use OctosWeb, :controller
-  alias Octos.Services.Users
+  alias Octos.Services.Users.Queries, as: Users
   alias OctosWeb.ErrorView
 
   def create(conn, params) do
@@ -15,12 +15,5 @@ defmodule OctosWeb.UsersController do
         |> put_view(ErrorView)
         |> render("error.json", changeset: changeset)
     end
-  end
-
-  def notify_users(conn, _params) do
-    # This is where the notification logic will go
-    conn
-    |> put_status(:ok)
-    |> render("notify_users.json")
   end
 end

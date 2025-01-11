@@ -1,7 +1,7 @@
-defmodule Octos.User do
+defmodule Octos.Models.User do
   use Ecto.Schema
   import Ecto.Changeset
-  alias Octos.Camera
+  alias Octos.Models.Camera
 
   @derive {Jason.Encoder, only: [:id, :name, :email, :enabled, :cameras]}
 
