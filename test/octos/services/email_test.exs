@@ -5,7 +5,7 @@ defmodule Octos.Services.EmailTest do
 
   describe "send_email_to_user/2" do
     test "sends an email with the email data" do
-      user = %User{name: "John Doe", email: "john.doe@example.com"}
+      user = %User{name: "Hevelyn Carvalho", email: "hc.doe@example.com"}
       email_data = %{
         "subject" => "Welcome to Octos",
         "body" => "Thank you for joining our team!"
@@ -18,7 +18,7 @@ defmodule Octos.Services.EmailTest do
     end
 
     test "uses default subject when not provided" do
-      user = %User{name: "Jane Doe", email: "jane.doe@example.com"}
+      user = %User{name: "Cody Maverick", email: "cm@example.com"}
       email_data = %{
         "body" => "Important update for you."
       }
@@ -30,7 +30,7 @@ defmodule Octos.Services.EmailTest do
     end
 
     test "return empty object when email data not provided" do
-      user = %User{name: "Alice", email: "alice@example.com"}
+      user = %User{name: "Zeke", email: "zeke@example.com"}
       email_data = %{"body" => ""}
 
       assert Email.send_email_to_user(user, email_data) == %Swoosh.Email{}
