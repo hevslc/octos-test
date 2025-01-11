@@ -1,5 +1,5 @@
 defmodule Octos.Services.Users.QueriesTest do
-  use Octos.DataCase, async: true
+  use Octos.DataCase
   alias Octos.Repo
   alias Octos.Models.{User, Camera}
   alias Octos.Services.Users.Queries, as: Users

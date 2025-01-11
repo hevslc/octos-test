@@ -1,7 +1,6 @@
 defmodule Octos.Services.Cameras.QueriesTest do
-  use Octos.DataCase, async: true
+  use Octos.DataCase
   import Mock
-
   alias Octos.Models.{Camera, User}
   alias Octos.Repo
   alias Octos.Services.Cameras.Queries, as: Cameras

@@ -1,5 +1,5 @@
 defmodule Octos.Services.EmailTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case
   alias Octos.Services.Email
   alias Octos.Models.User
 
