@@ -3,9 +3,7 @@ defmodule OctosWeb.CamerasController do
   alias Octos.Services.Cameras.Queries, as: Cameras
 
   def users_cameras(conn, params) do
-    filter = Map.get(params, "filter")
-    sort = Map.get(params, "sort")
-    users_cameras = Cameras.get_users_cameras(filter, sort)
+    users_cameras = Cameras.fetch_users_cameras(params)
 
     conn
     |> put_status(:ok)

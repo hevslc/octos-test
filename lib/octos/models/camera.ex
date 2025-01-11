@@ -15,9 +15,10 @@ defmodule Octos.Models.Camera do
     timestamps()
   end
 
-  def changeset(%{} = params) do
-    %__MODULE__{}
-    |> cast(params, [:name, :brand, :enabled])
+  def changeset(struct \\ %__MODULE__{}, params) do
+    struct
+    |> cast(params, [:name, :brand, :enabled, :user_id])
     |> validate_required([:name, :brand, :user_id])
+    |> foreign_key_constraint(:user_id, message: "User must exist")
   end
 end

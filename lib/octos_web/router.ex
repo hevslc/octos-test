@@ -9,6 +9,7 @@ defmodule OctosWeb.Router do
     pipe_through :api
 
     get "/cameras", CamerasController, :users_cameras
+    post "/notify-users", NotifyController, :notify_users
   end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development

@@ -16,9 +16,9 @@ defmodule Octos.Models.User do
     timestamps()
   end
 
-  def changeset(%{} = params) do
-    %__MODULE__{}
+  def changeset(struct \\ %__MODULE__{}, params) do
+    struct
     |> cast(params, [:name, :email, :encrypted_password, :enabled])
-    |> validate_required([:name])
+    |> validate_required([:name, :email])
   end
 end

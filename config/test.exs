@@ -8,8 +8,8 @@ import Config
 config :octos, Octos.Repo,
   username: "postgres",
   password: "postgres",
-  hostname: "localhost",
-  database: "octos_test#{System.get_env("MIX_TEST_PARTITION")}",
+  hostname: "db",
+  database: "octos_test",
   pool: Ecto.Adapters.SQL.Sandbox,
   pool_size: System.schedulers_online() * 2
 
@@ -31,3 +31,5 @@ config :logger, level: :warning
 
 # Initialize plugs at runtime for faster test compilation
 config :phoenix, :plug_init_mode, :runtime
+
+config :octos, Octos.Mailer, adapter: Swoosh.Adapters.Test

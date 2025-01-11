@@ -16,8 +16,48 @@ defmodule Octos.Services.Users.Queries do
   def disable_one(user_id) do
     User
     |> Repo.get!(user_id)
-    |> Map.put(:enabled, false)
-    |> User.changeset()
+    |> User.changeset(%{enabled: false})
     |> Repo.update()
   end
+
+  @doc """
+  Fetch users by filters
+  filter is of type:
+    %{
+      "user" => %{
+        "name" => ["Dr. Henry Wu"],
+        "email" => []
+      }
+      "camera" => %{
+        "name" => ["Camera 1", "Camera 2"],
+        "brand" => ["Hikvision"]
+      }
+    }
+  """
+  def fetch_users_by(filters) do
+    filter_queries = build_filter_queries(filters)
+
+    """
+      SELECT DISTINCT u.name, u.email
+      FROM users u
+      LEFT JOIN cameras c ON c.user_id = u.id
+      WHERE #{filter_queries}
+    """
+    |> Repo.query!()
+    |> Map.get(:rows)
+    |> Enum.map(fn [name, email] -> %{name: name, email: email} end)
+  end
+
+  defp build_filter_queries(filters) do
+    filters
+    |> Enum.flat_map(fn {table, fields} ->
+      Enum.map(fields, fn {field, values} ->
+        "#{alias_table(table)}.#{field} IN ('#{Enum.join(values, "', '")}')"
+      end)
+    end)
+    |> Enum.join(" AND ")
+  end
+
+  defp alias_table("user"), do: "u"
+  defp alias_table("camera"), do: "c"
 end

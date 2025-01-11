@@ -20,8 +20,7 @@ defmodule Octos.Services.Cameras.Queries do
   def disable(camera_id) do
     Camera
     |> Repo.get!(camera_id)
-    |> Map.put(:enabled, false)
-    |> Camera.changeset()
+    |> Camera.changeset(%{enabled: false})
     |> Repo.update()
     |> handle_user_deactivation()
   end
@@ -33,7 +32,10 @@ defmodule Octos.Services.Cameras.Queries do
     )
   end
 
-  def get_users_cameras(filter \\ nil, order \\ nil) do
+  def fetch_users_cameras(params \\ %{}) do
+    filter = Map.get(params, "filter")
+    order = Map.get(params, "order")
+
     query =
     """
     SELECT u.name, u.enabled, u.updated_at,
@@ -62,7 +64,7 @@ defmodule Octos.Services.Cameras.Queries do
   end
 
   defp filter_query(_field, nil = _filter), do: ""
-  defp filter_query(field, filter), do: "AND c.#{field} ILIKE '%#{filter}%' "
+  defp filter_query(field, filter), do: "WHERE c.#{field} ILIKE '%#{filter}%' "
 
   defp order_by_query(_field, nil = _order), do: ""
   defp order_by_query(field, order), do: "ORDER BY c.#{field} #{order} "
@@ -72,5 +74,7 @@ defmodule Octos.Services.Cameras.Queries do
     if(get_enabled_user_cameras(camera.user_id) == []) do
       Users.disable_one(camera.user_id)
     end
+
+    {:ok, camera}
   end
 end

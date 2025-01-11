@@ -38,15 +38,17 @@ defmodule Octos.MixProject do
       {:phoenix_view, "~> 2.0.4"},
       {:ecto_sql, "~> 3.10"},
       {:postgrex, ">= 0.0.0"},
-      {:phoenix_live_dashboard, "~> 0.8.6", only: :dev},
-      {:swoosh, "~> 1.5"},
+      {:phoenix_live_dashboard, "~> 0.8.6", only: [:dev, :test]},
+      {:swoosh, "~> 1.17"},
+      {:phoenix_swoosh, "~> 1.2"},
       {:finch, "~> 0.13"},
       {:telemetry_metrics, "~> 1.0"},
       {:telemetry_poller, "~> 1.0"},
       {:gettext, "~> 0.26"},
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.1.1"},
-      {:bandit, "~> 1.5"}
+      {:bandit, "~> 1.5"},
+      {:mock, "~> 0.3.9"}
     ]
   end
 
