@@ -15,6 +15,7 @@ defmodule Octos.DataCase do
   """
 
   use ExUnit.CaseTemplate
+  alias Ecto.Adapters.SQL.Sandbox
 
   using do
     quote do
@@ -28,16 +29,13 @@ defmodule Octos.DataCase do
   end
 
   setup tags do
-    Octos.DataCase.setup_sandbox(tags)
-    :ok
-  end
+    :ok = Sandbox.checkout(Octos.Repo)
 
-  @doc """
-  Sets up the sandbox based on the test tags.
-  """
-  def setup_sandbox(tags) do
-    pid = Ecto.Adapters.SQL.Sandbox.start_owner!(Octos.Repo, shared: not tags[:async])
-    on_exit(fn -> Ecto.Adapters.SQL.Sandbox.stop_owner(pid) end)
+    unless tags[:async] do
+      Sandbox.mode(Octos.Repo, {:shared, self()})
+    end
+
+    :ok
   end
 
   @doc """

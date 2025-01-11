@@ -16,6 +16,7 @@ defmodule OctosWeb.ConnCase do
   """
 
   use ExUnit.CaseTemplate
+  alias Ecto.Adapters.SQL.Sandbox
 
   using do
     quote do
@@ -32,7 +33,12 @@ defmodule OctosWeb.ConnCase do
   end
 
   setup tags do
-    Octos.DataCase.setup_sandbox(tags)
+    :ok = Sandbox.checkout(Octos.Repo)
+
+    unless tags[:async] do
+      Sandbox.mode(Octos.Repo, {:shared, self()})
+    end
+
     {:ok, conn: Phoenix.ConnTest.build_conn()}
   end
 end
