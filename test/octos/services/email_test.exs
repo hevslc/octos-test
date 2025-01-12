@@ -1,7 +1,8 @@
 defmodule Octos.Services.EmailTest do
   use ExUnit.Case
-  alias Octos.Services.Email
+  alias Octos.Mailer
   alias Octos.Models.User
+  alias Octos.Services.Email
 
   describe "send_email_to_user/2" do
     test "sends an email with the email data" do
@@ -15,6 +16,7 @@ defmodule Octos.Services.EmailTest do
 
       assert email.subject == "Welcome to Octos"
       assert email.text_body == parse_body(user.name, email_data["body"])
+      assert_called Mailer.deliver(:ok)
     end
 
     test "uses default subject when not provided" do
@@ -27,6 +29,7 @@ defmodule Octos.Services.EmailTest do
 
       assert email.subject == "Notification from Octos"
       assert email.text_body == parse_body(user.name, email_data["body"])
+      assert_called Mailer.deliver(:ok)
     end
 
     test "return empty object when email data not provided" do
@@ -34,6 +37,7 @@ defmodule Octos.Services.EmailTest do
       email_data = %{"body" => ""}
 
       assert Email.send_email_to_user(user, email_data) == %Swoosh.Email{}
+      assert_not_called Mailer.deliver(:ok)
     end
   end
 

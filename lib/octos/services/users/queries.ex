@@ -1,6 +1,9 @@
 defmodule Octos.Services.Users.Queries do
-  alias Octos.Repo
+  @moduledoc """
+  This module contains queries for the Users context.
+  """
   alias Octos.Models.User
+  alias Octos.Repo
 
   def create(user_attrs) do
     user_attrs
@@ -35,20 +38,20 @@ defmodule Octos.Services.Users.Queries do
     }
   """
   def fetch_users_by(filters) do
-    filter_queries = build_filter_queries(filters)
+    filter_querie = build_filter_querie(filters)
 
     """
       SELECT DISTINCT u.name, u.email
       FROM users u
       LEFT JOIN cameras c ON c.user_id = u.id
-      WHERE #{filter_queries}
+      WHERE #{filter_querie}
     """
     |> Repo.query!()
     |> Map.get(:rows)
     |> Enum.map(fn [name, email] -> %{name: name, email: email} end)
   end
 
-  defp build_filter_queries(filters) do
+  defp build_filter_querie(filters) do
     filters
     |> Enum.flat_map(fn {table, fields} ->
       Enum.map(fields, fn {field, values} ->

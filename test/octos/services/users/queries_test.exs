@@ -1,7 +1,7 @@
 defmodule Octos.Services.Users.QueriesTest do
   use Octos.DataCase
   alias Octos.Repo
-  alias Octos.Models.{User, Camera}
+  alias Octos.Models.{Camera, User}
   alias Octos.Services.Users.Queries, as: Users
 
   describe "create/1" do

@@ -21,13 +21,13 @@ defmodule Seeds do
 
     names = random_names()
 
-    seed_active_users(names)
-    seed_inactive_users(names)
+    seed_enabled_users(names)
+    seed_disabled_users(names)
 
     IO.puts("Database populated successfully!")
   end
 
-  defp seed_active_users(names) do
+  defp seed_enabled_users(names) do
     0..997
     |> Enum.each(fn it_user ->
       user = it_user |> mount_user(names, true) |> Repo.insert!()
@@ -37,7 +37,7 @@ defmodule Seeds do
     end)
   end
 
-  defp seed_inactive_users(names) do
+  defp seed_disabled_users(names) do
     998..999
     |> Enum.each(fn it_user ->
       user = it_user |> mount_user(names, false) |> Repo.insert!()

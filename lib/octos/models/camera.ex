@@ -1,4 +1,7 @@
 defmodule Octos.Models.Camera do
+  @moduledoc """
+  This module contains the Camera schema.
+  """
   use Ecto.Schema
   import Ecto.Changeset
   alias Octos.Models.User

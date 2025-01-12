@@ -1,4 +1,7 @@
 defmodule Octos.Services.Cameras.Queries do
+  @moduledoc """
+  This module contains queries for the Cameras context.
+  """
   import Ecto.Query
   alias Octos.Models.Camera
   alias Octos.Repo
@@ -71,7 +74,7 @@ defmodule Octos.Services.Cameras.Queries do
 
   defp handle_user_deactivation({:error, changeset}), do: {:error, changeset}
   defp handle_user_deactivation({:ok, camera}) do
-    if(get_enabled_user_cameras(camera.user_id) == []) do
+    if get_enabled_user_cameras(camera.user_id) == [] do
       Users.disable_one(camera.user_id)
     end
 

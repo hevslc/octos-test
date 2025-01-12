@@ -1,7 +1,6 @@
 defmodule OctosWeb.NotifyControllerTest do
   use OctosWeb.ConnCase, async: true
   import Mock
-  alias Octos.Mailer
   alias Octos.Services.Email
   alias Octos.Services.Users.Queries, as: Users
 
@@ -27,8 +26,7 @@ defmodule OctosWeb.NotifyControllerTest do
         conn = post(conn, "/api/notify-users", %{"filters" => filters, "email_data" => email_data})
 
         assert response(conn, 204)
-        assert_called Email.send_email_to_user(%{name: "Dr. Henry Wu", email: "dr.hw@example.com"}, email_data)
-        assert_called Mailer.deliver(:ok)
+        assert_called Email.send_email_to_user([%{name: "Dr. Henry Wu", email: "dr.hw@example.com"}], email_data)
       end
     end
   end
