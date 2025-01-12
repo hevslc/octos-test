@@ -102,15 +102,12 @@ Este projeto está dockerizado para garantir compatibilidade em qualquer ambient
 
 4. **Listar câmeras ativas dos usuários**
 
-   Faça uma requisição `GET` para `http://localhost:4000/api/cameras` com os seguintes parâmetros opcionais:  
-   ```json
-   {
-      "filter": "substring_to_filter_cameras_by_name",
-      "order": "asc_or_desc_the_cameras_by_name"
-   }
-   ```
+   Faça uma requisição `GET` para `http://localhost:4000/api/cameras` com os seguintes parâmetros opcionais:
 
-   Também é possível passar os parâmetros diretamente na URL:  
+   `filter`: Filtro para o nome das câmeras,
+
+   `order`: Ordenação pelo nome das câmeras (`asc` ou `desc`).
+
    ```
    http://localhost:4000/api/cameras?filter=valor1&order=asc
 
