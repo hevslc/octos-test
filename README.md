@@ -63,6 +63,135 @@ Não esperamos que você implemente autenticação e autorização, mas sua solu
 
 ---
 
+
+## Instruções de execução:
+Este projeto está dockerizado para garantir compatibilidade em qualquer ambiente. Siga os passos abaixo para executar o sistema:
+
+1. ***Subir container***
+
+   No diretório do projeto, execute:  
+   ```bash
+   docker compose up
+   ```  
+
+   O servidor estará disponível em `http://localhost:4000`.
+
+2. **Acessar o shell do container**  
+
+   No diretório do projeto, execute:  
+   ```bash
+   docker compose run --rm octos
+   ```
+
+3. **Executar testes e lint**  
+
+   Entre no shell do container:  
+   ```bash
+   docker compose run --rm octos sh
+   ```
+
+   Execute os testes no shell:  
+   ```bash
+   MIX_ENV=test mix test
+   ```
+
+   Execute o lint no shell:  
+   ```bash
+   mix credo --strict
+   ```
+
+4. **Listar câmeras ativas dos usuários**
+
+   Faça uma requisição `GET` para `http://localhost:4000/api/cameras` com os seguintes parâmetros opcionais:  
+   ```json
+   {
+      "filter": "substring_to_filter_cameras_by_name",
+      "order": "asc_or_desc_the_cameras_by_name"
+   }
+   ```
+
+   Também é possível passar os parâmetros diretamente na URL:  
+   ```
+   http://localhost:4000/api/cameras?filter=valor1&order=asc
+
+   ```
+
+   ### Exemplo
+   <details>
+   <summary>Expandir</summary>
+   <img src="image.png" alt="Exemplo de resposta" />
+   </details>
+
+
+5. **Enviar e-mail para usuários**
+
+   Faça uma requisição `POST` para `http://localhost:4000/api/notify-users` com um corpo JSON no formato:  
+   ```json
+   {
+      "filters": {
+         "user": {
+            "name": ["Dr. Henry Wu"],
+            "email": []
+         },
+         "camera": {
+            "name": ["Camera 1", "Camera 2"],
+            "brand": ["Hikvision"]
+         }
+      },
+      "email_data": {
+         "subject": "Notification from Octos",
+         "body": "Email Body"
+      }
+   }
+   ```
+
+   **Observações:**
+
+   - Os parâmetros `filters` e `email_data` são opcionais.  
+   - Se o `body` estiver vazio, o e-mail não será enviado (trava de segurança).  
+   - E-mails simulados podem ser visualizados em: `http://localhost:4000/dev/mailbox`.
+
+   ### Exemplo
+   <details>
+   <summary>Expandir</summary>
+   <img src="image-1.png" alt="Mailbox exemplo 1" />
+   <img src="image-2.png" alt="Mailbox exemplo 2" />
+   </details>
+
+---
+
 ## Detalhes da Implementação
 
-Essa seção é para você preencher com quaisquer decisões que tomou que podem ser relevantes. Você também pode mudar esse README para atender suas necessidades.
+### População do Banco (Seeds)
+- Usuários ativos e inativos foram criados para possibilitar testes variados.  
+- As câmeras são geradas com combinações de marca e ID do usuário, otimizando filtros e visualização.  
+- Para criar 1000 usuários, utilizei combinações de nomes reais.  
+- Uma coluna `password` foi adicionada pensando em uma futura funcionalidade de login. Todas as estruturas foram desenhadas com escalabilidade em mente.
+
+### Consultar Câmeras Ativas
+- **Local:** `lib/octos/services/cameras/queries.ex`  
+- **Função:** `fetch_users_cameras(params \ %{})`  
+
+Decisões de implementação:
+- A query foi construída como string para adicionar filtros e ordenação de maneira clara e evitar erros de variáveis não vinculadas (`unbound`).
+- Os filtros e ordenações foram aplicados diretamente na query para aproveitar as otimizações do banco de dados e reduzir o tráfego de rede.
+- A resposta inclui usuários ativos com suas câmeras e inativos com a data de desativação. Considerei que atualizações em usuários inativos só são permitidas para reativação. Portanto, a data de desativação deve ser igual ao updated_at (última atualização é a de desativação).
+- Adicionei como atributos de módulo o campo a ser filtrado/ordenado para facilitar uma possíevel mudança posterior. Mas fica como ideia de melhoramento colocar essa informação como parâmetro na request.
+
+### Enviar Notificação por E-mail
+- **Consulta de usuários:**  
+  - Local: `lib/octos/services/users/queries.ex`  
+  - Função: `fetch_users_by(filters)`  
+
+- **Serviço de e-mail:**  
+  - Local: `lib/octos/services/email.ex`  
+  - Função: `send_email_to_user(user, email_data)`  
+
+Decisões de implementação:
+- Filtros e dados de e-mail foram parametrizados para facilitar futuras extensões.  
+- Caso o assunto (`subject`) não seja informado, um texto padrão será usado.  
+- Caso o corpo (`body`) não seja informado, o e-mail não será enviado. Se for informado, o texto será formatado colocando a introdução e saudação final.
+
+### Testes
+- Foram adicionados testes para todas as funções criadas, mesmo as fora do escopo direto deste exercício.  
+- Testes unitários foram isolados com mocks de dependências externas para validar corretamente o comportamento interno do código.
