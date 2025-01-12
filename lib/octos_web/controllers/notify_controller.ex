@@ -28,7 +28,7 @@ defmodule OctosWeb.NotifyController do
   def notify_users(conn, %{"filters" => filters, "email_data" => email_data}) do
     filters
     |> Users.fetch_users_by()
-    |> Email.send_email_to_user(email_data)
+    |> Email.send_email_to_users(email_data)
 
     send_resp(conn, :no_content, "")
   end

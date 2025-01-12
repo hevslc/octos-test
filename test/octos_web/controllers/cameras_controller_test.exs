@@ -1,5 +1,5 @@
 defmodule OctosWeb.CamerasControllerTest do
-  use OctosWeb.ConnCase, async: true
+  use OctosWeb.ConnCase
   import Mock
   alias Octos.Services.Cameras.Queries, as: Cameras
 

@@ -12,12 +12,8 @@ defmodule Octos.Services.Email do
     - body: the email body # optional (is required to send an email)
   """
 
-  def send_email_to_user(users, email_data) when is_list(users) do
-    for user <- users do
-      user
-      |> send_email_to_user(email_data)
-      |> Mailer.deliver()
-    end
+  def send_email_to_users(users, email_data) do
+    Enum.each(users, fn user -> send_email_to_user(user, email_data) end)
   end
 
   def send_email_to_user(user, email_data) do
@@ -29,7 +25,7 @@ defmodule Octos.Services.Email do
     |> send(subject, user.name, user.email)
   end
 
-  defp send("" = _body, _subject, _name, _email), do: %Swoosh.Email{}
+  defp send("" = _body, _subject, _name, _email), do: :nothing
   defp send(body, subject, name, email) do
     formatted_body = "Hello #{name},\n\n" <> body <> "\n\nBest,\nOctos Team"
 
@@ -38,5 +34,6 @@ defmodule Octos.Services.Email do
     |> from({"Octos", "noreply@octos.com"})
     |> subject(subject)
     |> text_body(formatted_body)
+    |> Mailer.deliver()
   end
 end
